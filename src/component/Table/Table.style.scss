@@ -1,0 +1,152 @@
+.table-common {
+  padding: 2rem;
+
+  &__table {
+
+    .ant-table-thead > tr > th {
+      background: lighten(#1890ff, 10%);
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .ant-table-content {
+      .ant-table-tbody {
+        .ant-table-row {
+          &.ant-table-row-selected.record-remove {
+            &:hover {
+              cursor: not-allowed;
+            }
+            td {
+              opacity: 0.5;
+              pointer-events: none;
+            }
+          }
+
+          &.record-selected {
+            td {
+              background: lighten(#1890ff, 30%);
+            }
+          }
+
+          &.record-create {
+            td {
+              background: #eee;
+            }
+
+            &>td:nth-child(2) {
+              color: transparent;
+            }
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .ant-table-cell.ant-table-column-has-sorters:hover {
+      background: lighten(#1890ff, 10%);
+    }
+
+    .ant-table-column-sorter-inner {
+      .anticon-caret-up,
+      .anticon-caret-down {
+        &.active {
+          svg {
+            fill: #fff;
+          }
+        }
+      }
+    }
+    .ant-pagination.ant-table-pagination {
+      .ant-pagination-item-link, .ant-pagination-item {
+        border-radius: 50%;
+      } 
+
+    }
+  }
+
+  &__form {
+    padding-left: 2rem;
+
+    .wapprer-form {
+      padding-left: 0;
+
+      .form-input {
+        height: 40px;
+        border-radius: 30px;
+      }
+
+      .ant-form-item-label {
+        width: 70px;
+        text-align: left;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .ant-row.ant-form-item {
+        margin-bottom: 2rem;
+        &.ant-form-item-with-help {
+          &.ant-form-item-has-error,
+          &.ant-form-item-has-success {
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+
+      &__button {
+        display: flex;
+        padding-left: 0;
+        padding-bottom: 2rem;
+        justify-content: space-between;
+
+        .btn {
+          height: 40px;
+          border-radius: 30px;
+          color: #fff;
+          width: 100px;
+          &__save {
+            $primary-color: #08979c;
+            background: $primary-color;
+            border-color: $primary-color;
+            box-shadow: 0 2px 2px 0 rgba(8, 151, 156, 0.14), 0 3px 1px -2px rgba(8, 151, 156, 0.2),
+              0 1px 5px 0 rgba(8, 151, 156, 0.12);
+
+            &:hover,
+            &:focus {
+              background: darken($primary-color, 5%);
+            }
+          }
+          &__delete {
+            $primary-color: #cf1322;
+            background: $primary-color;
+            border-color: $primary-color;
+            box-shadow: 0 2px 2px 0 rgba(207, 19, 34, 0.14), 0 3px 1px -2px rgba(207, 19, 34, 0.2),
+              0 1px 5px 0 rgba(207, 19, 34, 0.12);
+
+            &:hover,
+            &:focus {
+              background: darken($primary-color, 5%);
+            }
+          }
+          &__create {
+            $primary-color: #237804;
+            background: $primary-color;
+            border-color: $primary-color;
+            box-shadow: 0 2px 2px 0 rgba(35, 120, 4, 0.14), 0 3px 1px -2px rgba(35, 120, 4, 0.2),
+              0 1px 5px 0 rgba(35, 120, 4, 0.12);
+            &:hover,
+            &:focus {
+              background: darken($primary-color, 5%);
+            }
+          }
+        }
+      }
+
+      .disable-input {
+        color: transparent;
+      }
+    }
+  }
+}
