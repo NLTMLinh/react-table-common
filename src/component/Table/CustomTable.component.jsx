@@ -254,7 +254,7 @@ const CustomTableComponent = ({
     }
     const idRecord = document.getElementById("form_id").value
 
-    if (idRecord === currentRow.id) {
+    if (currentRow && idRecord === currentRow.id) {
       setCurrentRow(null)
       form.resetFields()
     }
