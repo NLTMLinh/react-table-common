@@ -4,6 +4,7 @@ import { logger } from 'redux-logger';
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
 
+console.log('object', process.env.NODE_ENV)
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
