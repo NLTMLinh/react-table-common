@@ -14,14 +14,6 @@ const TableCommon = (props) => {
       onRow={(record, rowIndex) => {
         return {
           onClick: () => {
-            const trs = document.getElementsByTagName('tr')
-            for (let tr of trs) {
-              if (record.id === tr.dataset.rowKey) {
-                tr.classList.add("record-selected")
-              } else {
-                tr.classList.remove("record-selected")
-              }
-            }
             props.handleBindingData(record); // click row
           },
           onDoubleClick: () => {
