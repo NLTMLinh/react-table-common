@@ -64,7 +64,7 @@ const CustomTableComponent = ({
   const [columns, setColumns] = useState(COLUMNS_TABLE)
 
   useEffect(() => {
-    setColorRecordCreate()
+    setColorRecordCreate();
   })
 
   useEffect(() => {
@@ -72,12 +72,10 @@ const CustomTableComponent = ({
     return () => setCheckPressBtnSave(false)
   }, [fetchEmployeeStart])
 
-
   if (employees.length !== 0 && dataTable !== employees) {
     setDataTable(employees)
   }
 
-  
   if (error) {
     return <Result
       subTitle="Sorry, Wrong error."
@@ -112,7 +110,7 @@ const CustomTableComponent = ({
     if (!value) {
       return Promise.reject()
     }
-    else if (value.match(salary_regex)) {
+    else if (value.toString().match(salary_regex)) {
       return Promise.reject('Please enter the right format.');
     }
 
@@ -124,7 +122,7 @@ const CustomTableComponent = ({
     if (!value) {
       return Promise.reject()
     }
-    else if (value.match(age_regex)) {
+    else if (value.toString().match(age_regex)) {
       return Promise.reject('Please enter the right format.');
     }
     else if (+value < 20) {
@@ -144,16 +142,6 @@ const CustomTableComponent = ({
 
     return name
   }
-
-  const onFinish = (values) => {
-    if (currentPage !== 1) {
-      setCurrentPage(1)
-    }
-    values.id = dataCreate.length === 0 ? (+dataTable[dataTable.length - 1].id + 1).toString() : (+dataCreate[0].id + 1).toString()
-    values.employee_name = formatEmployeeName(values.employee_name)
-    createEmployee(values)
-    form.resetFields()
-  };
 
   const onValuesChange = (values) => {
     let functionCheck = null;
@@ -188,6 +176,17 @@ const CustomTableComponent = ({
       setCurrentRow(record)
     }
   }
+
+  const onFinish = (values) => {
+    if (currentPage !== 1) {
+      setCurrentPage(1)
+    }
+    setColorRecordDelete(selectedRowKeys)
+    values.id = dataCreate.length === 0 ? (+dataTable[dataTable.length - 1].id + 1).toString() : (+dataCreate[0].id + 1).toString()
+    values.employee_name = formatEmployeeName(values.employee_name)
+    createEmployee(values)
+    form.resetFields()
+  };
 
   const handleBtnSave = () => {
 
@@ -226,12 +225,6 @@ const CustomTableComponent = ({
       setCheckPressBtnSave(true)
     }
 
-    if (dataDelete.length !== 0) {
-      setSelectedRowKeys([])
-      saveDeleteEmployeeStart(dataDelete)
-      form.resetFields()
-    }
-
     if (dataCreate.length !== 0) {
       let data = dataCreate;
       if (checkEditWhenCreateRecord) {
@@ -241,42 +234,41 @@ const CustomTableComponent = ({
       form.resetFields()
       checkEditWhenCreateRecord = false
     }
+    
+    if (dataDelete.length !== 0) {
+      setSelectedRowKeys([])
+      saveDeleteEmployeeStart(dataDelete)
+      form.resetFields()
+    }
+
   }
 
   const handleBtnDelete = () => {
-    const trs = document.getElementsByTagName('tr')
-    for (let tr of trs) {
-      if (selectedRowKeys.includes(tr.dataset.rowKey)) {
-        tr.classList.add("record-remove")
-      } else {
-        tr.classList.remove("record-remove")
-      }
-    }
     const idRecord = document.getElementById("form_id").value
 
-    if (currentRow && idRecord === currentRow.id) {
+    if(selectedRowKeys.includes(idRecord)) {
       setCurrentRow(null)
       form.resetFields()
     }
+
     const recordCreate = dataCreate.map((item) => item.id)
     const selectedRowKeysDel = selectedRowKeys.filter((rowKey) => !recordCreate.includes(rowKey))
     setSelectedRowKeys(selectedRowKeysDel)
     deleteEmployee(selectedRowKeys)
+    setColorRecordDelete(selectedRowKeysDel)
   }
 
-  const handleBindingData = (row) => {
-    setCurrentRow(row)
-    if (row) {
-      form.setFieldsValue(row)
-      if (dataCreate.map(item => item.id).includes(row.id)) {
-        document.getElementById('form_id').classList.add("disable-input")
-      } else {
-        document.getElementById('form_id').classList.remove("disable-input")
+  const setColorRecordDelete = (_selectedRowKeys) => {
+    const trs = document.getElementsByTagName('tr')
+    setTimeout(() => {
+      for (let tr of trs) {
+        if (_selectedRowKeys.includes(tr.dataset.rowKey)) {
+          tr.classList.add("record-remove")
+        } else {
+          tr.classList.remove("record-remove")
+        }
       }
-    }
-    else {
-      form.resetFields()
-    }
+    }, 0)
   }
 
   const setColorRecordCreate = () => {
@@ -295,8 +287,37 @@ const CustomTableComponent = ({
     }
   }
 
+  const handleBindingData = (row) => {
+    setCurrentRow(row)
+    if (row) {
+      const trs = document.getElementsByTagName('tr')
+      setTimeout(() => {
+        for (let tr of trs) {
+          if (row.id === tr.dataset.rowKey) {
+            tr.classList.add("record-selected")
+          } else {
+            tr.classList.remove("record-selected")
+          }
+        }
+      },0)
+      form.setFieldsValue(row)
+      if (dataCreate.map(item => item.id).includes(row.id)) {
+        document.getElementById('form_id').classList.add("disable-input")
+      } else {
+        document.getElementById('form_id').classList.remove("disable-input")
+      }
+    }
+    else {
+      form.resetFields()
+    }
+  }
+
   const onChangePagination = (page) => {
     setCurrentPage(page)
+    if(currentRow) {
+      handleBindingData(currentRow)
+    }
+    setColorRecordDelete(dataDelete)
     setColorRecordCreate()
   }
 
@@ -325,6 +346,7 @@ const CustomTableComponent = ({
     }),
   }));
 
+  // end
   return (
     <Spin spinning={loading} tip={checkPressBtnSave ? "Saving...." : "Loading..."} size="large">
       <div className="table-common">
